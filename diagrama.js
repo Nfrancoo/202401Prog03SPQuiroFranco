@@ -1,9 +1,9 @@
 class Persona {
-    constructor(id, nombre, apellido, edad) {
+    constructor(id, nombre, apellido, fechaNacimiento) {
         this.id = id;
         this.setNombre(nombre);
         this.setApellido(apellido);
-        this.setEdad(edad);
+        this.setFechaNacimiento(fechaNacimiento);
     }
 
     setNombre(nombre) {
@@ -22,55 +22,42 @@ class Persona {
         }
     }
 
-    setEdad(edad) {
-        let edadSet = edad;
-        if (!Number.isInteger(edadSet)) {
-            edadSet = parseInt(edadSet);
+    setFechaNacimiento(fechaNacimiento) {
+        let fechaNacimientoSet = fechaNacimiento;
+        if (!Number.isInteger(fechaNacimientoSet)) {
+            fechaNacimientoSet = parseInt(fechaNacimientoSet);
         }
-        if (!isNaN(edadSet) && typeof edadSet === 'number' && edadSet > 15) {
-            this.edad = edadSet;
+        if (!isNaN(fechaNacimientoSet) && typeof fechaNacimientoSet === 'number' && fechaNacimientoSet >= 10000101 && fechaNacimientoSet <= 99991231) {
+            this.fechaNacimiento = fechaNacimientoSet;
         } else {
-            throw new Error("Error: La edad no se paso correctamente.");
+            throw new Error("Error: La fecha de nacimiento debe ser un número entero con formato AAAAMMDD.");
         }
     }
+    
 
     toString() {
         let string = "Id: " + this.id.toString() + "\n";
         string += "Nombre: " + this.nombre + "\n";
         string += "Apellido: " + this.apellido + "\n";
-        string += "Edad: " + this.edad.toString();
+        string += "Fecha de nacimiento: " + this.fechaNacimiento.toString();
         return string;
-    }
+        }
 }
 
-class Empleado extends Persona {
-    constructor(id, nombre, apellido, edad, ventas, sueldo) {
-        super(id, nombre, apellido, edad);
-        this.setVentas(ventas);
-        this.setSueldo(sueldo);
+class Ciudadano extends Persona {
+    constructor(id, nombre, apellido, fechaNacimiento, dni) {
+        super(id, nombre, apellido, fechaNacimiento);
+        this.setDni(dni);
     }
 
-    setVentas(ventas) {
-        let ventasSet = ventas;
-        if (!Number.isInteger(ventasSet)) {
-            ventasSet = parseInt(ventasSet);
+    setDni(dni) {
+        let dniSet = dni;
+        if (!Number.isInteger(dniSet)) {
+            dniSet = parseInt(dniSet);
         }
 
-        if (!isNaN(ventasSet) && ventasSet > 0 && typeof ventasSet === 'number') {
-            this.ventas = ventasSet;
-        } else {
-            throw new Error("Error. El numero es menor a 0, no puedes");
-        }
-    }
-
-    setSueldo(sueldo) {
-        let sueldoSet = sueldo;
-        if (!Number.isInteger(sueldoSet)) {
-            sueldoSet = parseInt(sueldoSet);
-        }
-
-        if (!isNaN(sueldoSet) && sueldoSet > 0 && typeof sueldoSet === 'number') {
-            this.sueldo = sueldoSet;
+        if (!isNaN(dniSet) && dniSet > 0 && typeof dniSet === 'number') {
+            this.dni = dniSet;
         } else {
             throw new Error("Error. El numero es menor a 0, no puedes");
         }
@@ -78,49 +65,34 @@ class Empleado extends Persona {
 
     toString() {
         let mensaje = super.toString();
-        mensaje += "\nVentas: " + this.ventas.toString() + "\n";
-        mensaje += "\nSueldo: " + this.sueldo.toString() + "\n";
+        mensaje += "\nDni: " + this.dni.toString() + "\n";
         return mensaje;
     }
 }
 
-class Cliente extends Persona {
-    constructor(id, nombre, apellido, edad, compras, telefono) {
-        super(id, nombre, apellido, edad);
-        this.setCompras(compras);
-        this.setTelefono(telefono);
+class Extranjero extends Persona {
+    constructor(id, nombre, apellido, fechaNacimiento, paisOrigen) {
+        super(id, nombre, apellido, fechaNacimiento);
+        this.setPaisOrigen(paisOrigen);
     }
 
-    setCompras(compras) {
-        let comprasSet = compras;
-        if (!Number.isInteger(comprasSet)) {
-            comprasSet = parseInt(comprasSet);
-        }
-
-        if (!isNaN(comprasSet) && comprasSet > 0 && typeof comprasSet === 'number') {
-            this.compras = comprasSet;
-        } else {
-            throw new Error("Error. El numero es menor a 0, no puedes");
-        }
-    }
-
-    setTelefono(telefono) {
-        if (typeof telefono === "string" && telefono !== "") {
-            this.telefono = telefono;
+    setPaisOrigen(paisOrigen) {
+        if (typeof paisOrigen === "string" && paisOrigen !== "") {
+            this.paisOrigen = paisOrigen;
         } else {
             throw new Error("Error. No estas agregando un apellido correcto");
         }
     }
 
+
     toString() {
         let mensaje = super.toString();
-        mensaje += "\nTelefono: " + this.telefono + "\n";
-        mensaje += "\nCompras: " + this.compras.toString() + "\n";
+        mensaje += "\nPaisOrigen: " + this.paisOrigen + "\n";
         return mensaje;
     }
 }
 
-const claves = ['id', 'nombre', 'apellido', 'edad', 'ventas', 'sueldo', 'compras', 'telefono'];
+const claves = ['id', 'nombre', 'apellido', 'fechaNacimiento', 'dni', 'paisOrigen'];
 let personas = [];
 
 
@@ -152,7 +124,7 @@ function cargarDatos() {
         }
     };
 
-    http.open("GET", "http://localhost/PersonasEmpleadosClientes.php", true);
+    http.open("GET", "https://examenesutn.vercel.app/api/PersonaCiudadanoExtranjero", true);
     http.send();
 }
 
@@ -160,16 +132,17 @@ function cargarDatos() {
 function generarLista(data) {
     personas = [];
     for (let item of data) {
-        if (item.ventas && item.sueldo) {
-            personas.push(new Empleado(item.id, item.nombre, item.apellido, item.edad, item.ventas, item.sueldo));
-        } else if (item.compras && item.telefono) {
-            personas.push(new Cliente(item.id, item.nombre, item.apellido, item.edad, item.compras, item.telefono));
+        if (item.dni) {
+            personas.push(new Ciudadano(item.id, item.nombre, item.apellido, item.fechaNacimiento, item.dni));
+        } else if (item.paisOrigen) {
+            personas.push(new Extranjero(item.id, item.nombre, item.apellido, item.fechaNacimiento, item.paisOrigen));
         }
     }
 }
 
 function mostrarFormularioLista() {
     const formDatos = document.getElementById("form-datos");
+    const formAgregar = document.getElementById("form-agregar");
     const tUserBody = document.getElementById("t-user-body");
 
     tUserBody.innerHTML = "";
@@ -189,25 +162,17 @@ function mostrarFormularioLista() {
         apellidoCell.textContent = persona.apellido;
         row.appendChild(apellidoCell);
 
-        const edadCell = document.createElement("td");
-        edadCell.textContent = persona.edad;
-        row.appendChild(edadCell);
+        const fechaNacimientoCell = document.createElement("td");
+        fechaNacimientoCell.textContent = persona.fechaNacimiento;
+        row.appendChild(fechaNacimientoCell);
 
-        const ventasCell = document.createElement("td");
-        ventasCell.textContent = persona instanceof Empleado ? persona.ventas : "-";
-        row.appendChild(ventasCell);
+        const dniCell = document.createElement("td");
+        dniCell.textContent = persona instanceof Ciudadano ? persona.dni : "-";
+        row.appendChild(dniCell);
 
-        const sueldoCell = document.createElement("td");
-        sueldoCell.textContent = persona instanceof Empleado ? persona.sueldo : "-";
-        row.appendChild(sueldoCell);
-
-        const comprasCell = document.createElement("td");
-        comprasCell.textContent = persona instanceof Cliente ? persona.compras : "-";
-        row.appendChild(comprasCell);
-
-        const telefonoCell = document.createElement("td");
-        telefonoCell.textContent = persona instanceof Cliente ? persona.telefono : "-";
-        row.appendChild(telefonoCell);
+        const paisOrigenCell = document.createElement("td");
+        paisOrigenCell.textContent = persona instanceof Extranjero ? persona.paisOrigen : "-";
+        row.appendChild(paisOrigenCell);
 
         // Botón Modificar
         const modificarCell = document.createElement("td");
@@ -234,7 +199,8 @@ function mostrarFormularioLista() {
         tUserBody.appendChild(row);
     }
 
-    formDatos.hidden = false;
+    formDatos.style.display = "block";
+    formAgregar.style.display = "none";
 }
 
 function vaciar(elemento)
@@ -289,11 +255,9 @@ function MostrarAgregar() {
     document.getElementById("txt-id").value = "";
     document.getElementById("txt-nombre").value = "";
     document.getElementById("txt-apellido").value = "";
-    document.getElementById("txt-edad").value = "";
-    document.getElementById("txt-ventas").value = "";
-    document.getElementById("txt-sueldo").value = "";
-    document.getElementById("txt-compras").value = "";
-    document.getElementById("txt-telefono").value = "";
+    document.getElementById("txt-fechaNacimiento").value = "";
+    document.getElementById("txt-dni").value = "";
+    document.getElementById("txt-paisOrigen").value = "";
 
     select_tipo.disabled = false;
     btn_agregar.hidden = false;
@@ -304,42 +268,39 @@ function MostrarAgregar() {
     SetTipo(select_tipo.value);
 }
 
-
 async function Agregar() {
     const spinner = document.getElementById("spinner");
+    const formulario_agregar = document.getElementById("form-agregar");
+    const formulario_datos = document.getElementById("form-datos");
+    
     spinner.style.display = "block";
     try {
         let nuevoPersona;
         const nombre = document.getElementById("txt-nombre").value;
         const apellido = document.getElementById("txt-apellido").value;
-        const edad = document.getElementById("txt-edad").value;
+        const fechaNacimiento = document.getElementById("txt-fechaNacimiento").value;
+        const tipo = document.getElementById("select-tipo").value;
         let id = ObtenerProximoId(personas);
 
-        const tipo = document.getElementById("select-tipo").value;
-
-        if (tipo === "empleado") {
-            const ventas = document.getElementById("txt-ventas").value;
-            const sueldo = document.getElementById("txt-sueldo").value;
-            nuevoPersona = new Empleado(id, nombre, apellido, edad, ventas, sueldo);
-        } else if (tipo === "cliente") {
-            const compras = document.getElementById("txt-compras").value;
-            const telefono = document.getElementById("txt-telefono").value;
-            nuevoPersona = new Cliente(id, nombre, apellido, edad, compras, telefono);
+        if (tipo === "ciudadano") {
+            const dni = document.getElementById("txt-dni").value;
+            nuevoPersona = new Ciudadano(null, nombre, apellido, fechaNacimiento, dni);
+        } else if (tipo === "extranjero") {
+            const paisOrigen = document.getElementById("txt-paisOrigen").value;
+            nuevoPersona = new Extranjero(null, nombre, apellido, fechaNacimiento, paisOrigen);
         }
 
-        const response = await fetch("http://localhost/PersonasEmpleadosClientes.php", {
-            method: "PUT",
+        const response = await fetch("https://examenesutn.vercel.app/api/PersonaCiudadanoExtranjero", {
+            method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 nombre: nuevoPersona.nombre,
                 apellido: nuevoPersona.apellido,
-                edad: nuevoPersona.edad,
-                ventas: nuevoPersona instanceof Empleado ? nuevoPersona.ventas : undefined,
-                sueldo: nuevoPersona instanceof Empleado ? nuevoPersona.sueldo : undefined,
-                compras: nuevoPersona instanceof Cliente ? nuevoPersona.compras : undefined,
-                telefono: nuevoPersona instanceof Cliente ? nuevoPersona.telefono : undefined
+                fechaNacimiento: nuevoPersona.fechaNacimiento,
+                dni: nuevoPersona instanceof Ciudadano ? nuevoPersona.dni : undefined,
+                paisOrigen: nuevoPersona instanceof Extranjero ? nuevoPersona.paisOrigen : undefined
             })
         });
         
@@ -353,10 +314,8 @@ async function Agregar() {
         personas.push(nuevoPersona);
         ActualizarTabla();
         mostrarFormularioLista();
-        const formulario_datos = document.getElementById("form-datos");
-        const formulario_agregar = document.getElementById("form-agregar");
-        formulario_datos.hidden = false;
-        formulario_agregar.hidden = true;
+        formulario_datos.style.display = "block"
+        formulario_agregar.style.display = "none"
         alert("La persona se ha agregado correctamente");
     } catch (error) {
         alert("Error: " + error.message);
@@ -366,75 +325,58 @@ async function Agregar() {
 }
 
 
-async function Modificar(persona) {
+function Modificar() {
     const spinner = document.getElementById("spinner");
     spinner.style.display = "block";
+    
+    const id = document.getElementById("txt-id").value;
+    const nombre = document.getElementById("txt-nombre").value;
+    const apellido = document.getElementById("txt-apellido").value;
+    const fechaNacimiento = document.getElementById("txt-fechaNacimiento").value;
+    const dni = document.getElementById("txt-dni").value;
+    const paisOrigen = document.getElementById("txt-paisOrigen").value;
 
-    try {
-        const id = document.getElementById("txt-id").value;
-        const nombre = document.getElementById("txt-nombre").value;
-        const apellido = document.getElementById("txt-apellido").value;
-        const edad = document.getElementById("txt-edad").value;
-        const tipo = document.getElementById("select-tipo").value;
+    const personaModificada = {
+        id: id,
+        nombre: nombre,
+        apellido: apellido,
+        fechaNacimiento: fechaNacimiento
+    };
 
-        let ventas, sueldo, compras, telefono;
-        if (tipo === "empleado") {
-            ventas = document.getElementById("txt-ventas").value;
-            sueldo = document.getElementById("txt-sueldo").value;
-        } else if (tipo === "cliente") {
-            compras = document.getElementById("txt-compras").value;
-            telefono = document.getElementById("txt-telefono").value;
-        }
-
-        const response = await fetch("http://localhost/PersonasEmpleadosClientes.php", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                id: persona.id,
-                nombre: nombre,
-                apellido: apellido,
-                edad: edad,
-                ventas: ventas,
-                sueldo: sueldo,
-                compras: compras,
-                telefono: telefono
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('Error en la solicitud');
-        }
-
-        const data = await response.json();
-
-        persona.setNombre(nombre);
-        persona.setApellido(apellido);
-        persona.setEdad(edad);
-        if (tipo === "empleado") {
-            persona.setVentas(ventas);
-            persona.setSueldo(sueldo);
-        } else if (tipo === "cliente") {
-            persona.setCompras(compras);
-            persona.setTelefono(telefono);
-        }
-
-        ActualizarTabla();
-        mostrarFormularioLista();
-        alert("La persona se ha modificado correctamente");
-
-        // Ocultar el formulario de agregar
-        document.getElementById("form-agregar").style.display= "none";
-        // Mostrar el formulario de datos
-        document.getElementById("form-datos").style.display= "block";
-
-    } catch (error) {
-        mostrarFormularioLista();
-        alert("Error: " + error.message);
-    } finally {
-        spinner.style.display = "none"; 
+    if (dni) {
+        personaModificada.dni = dni;
+    } else if (paisOrigen) {
+        personaModificada.paisOrigen = paisOrigen;
     }
+
+    fetch('https://examenesutn.vercel.app/api/PersonaCiudadanoExtranjero', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(personaModificada)
+    })
+    .then(response => {
+        spinner.style.display = "none";
+        if (response.status === 200) {
+            // Asegurar que el ID es un número para la comparación
+            const index = personas.findIndex(p => p.id == id);
+            if (index !== -1) {
+                // Actualizar la persona en la lista
+                personas[index] = personaModificada;
+                mostrarFormularioLista();
+            } else {
+                alert("No se encontró la persona en la lista.");
+            }
+        } else {
+            alert("No se pudo realizar la operación, El usuario no se puede modificar.");
+            mostrarFormularioLista();
+        }
+    })
+    .catch(error => {
+        spinner.style.display = "none";
+        alert("Ocurrió un error: " + error.message);
+    });
 }
 
 function Cancelar() {
@@ -464,18 +406,16 @@ function MostrarEliminar(persona) {
     document.getElementById("txt-id").value = persona.id;
     document.getElementById("txt-nombre").value = persona.nombre;
     document.getElementById("txt-apellido").value = persona.apellido;
-    document.getElementById("txt-edad").value = persona.edad;
+    document.getElementById("txt-fechaNacimiento").value = persona.fechaNacimiento;
     
-    if (persona instanceof Empleado) {
-        document.getElementById("txt-ventas").value = persona.ventas;
-        document.getElementById("txt-sueldo").value = persona.sueldo;
-        selectTipo.value = "empleado";
-        SetTipo("empleado");
-    } else if (persona instanceof Cliente) {
-        document.getElementById("txt-compras").value = persona.compras;
-        document.getElementById("txt-telefono").value = persona.telefono;
-        selectTipo.value = "cliente";
-        SetTipo("cliente");
+    if (persona instanceof Ciudadano) {
+        document.getElementById("txt-dni").value = persona.dni;
+        selectTipo.value = "ciudadano";
+        SetTipo("ciudadano");
+    } else if (persona instanceof Extranjero) {
+        document.getElementById("txt-paisOrigen").value = persona.paisOrigen;
+        selectTipo.value = "extranjero";
+        SetTipo("extranjero");
     }
 
     selectTipo.disabled = true;
@@ -501,7 +441,7 @@ async function Eliminar(id) {
     spinner.style.display = "block";
 
     try {
-        const response = await fetch("http://localhost/PersonasEmpleadosClientes.php", {
+        const response = await fetch("https://examenesutn.vercel.app/api/PersonaCiudadanoExtranjero", {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
@@ -517,7 +457,6 @@ async function Eliminar(id) {
             throw new Error('Error en la solicitud');
         }
 
-        // Elimina la persona de la lista local
         personas = personas.filter(persona => persona.id !== id);
         ActualizarTabla();
         mostrarFormularioLista();
@@ -554,18 +493,16 @@ function MostrarModificar(persona) {
     document.getElementById("txt-id").value = persona.id;
     document.getElementById("txt-nombre").value = persona.nombre;
     document.getElementById("txt-apellido").value = persona.apellido;
-    document.getElementById("txt-edad").value = persona.edad;
+    document.getElementById("txt-fechaNacimiento").value = persona.fechaNacimiento;
     
-    if (persona instanceof Empleado) {
-        document.getElementById("txt-ventas").value = persona.ventas;
-        document.getElementById("txt-sueldo").value = persona.sueldo;
-        selectTipo.value = "empleado";
-        SetTipo("empleado");
-    } else if (persona instanceof Cliente) {
-        document.getElementById("txt-compras").value = persona.compras;
-        document.getElementById("txt-telefono").value = persona.telefono;
-        selectTipo.value = "cliente";
-        SetTipo("cliente");
+    if (persona instanceof Ciudadano) {
+        document.getElementById("txt-dni").value = persona.dni;
+        selectTipo.value = "ciudadano";
+        SetTipo("ciudadano");
+    } else if (persona instanceof Extranjero) {
+        document.getElementById("txt-paisOrigen").value = persona.paisOrigen;
+        selectTipo.value = "extranjero";
+        SetTipo("extranjero");
     }
 
     selectTipo.disabled = true;
@@ -574,12 +511,6 @@ function MostrarModificar(persona) {
     btnEliminar.hidden = true;
     divId.hidden = false;
 
-
-    // Eliminar eventos anteriores para evitar duplicados
-    btnModificar.removeEventListener("click", () => Modificar(persona));
-    btnModificar.addEventListener("click", () => Modificar(persona));
-    btnCancelar.removeEventListener("click", () => Cancelar());
-    btnCancelar.addEventListener("click", () => Cancelar());
 }
 
 
@@ -611,25 +542,18 @@ function ActualizarTabla() {
         apellidoCell.textContent = persona.apellido;
         row.appendChild(apellidoCell);
 
-        const edadCell = document.createElement("td");
-        edadCell.textContent = persona.edad;
-        row.appendChild(edadCell);
+        const fechaNacimientoCell = document.createElement("td");
+        fechaNacimientoCell.textContent = persona.fechaNacimiento;
+        row.appendChild(fechaNacimientoCell);
 
-        const ventasCell = document.createElement("td");
-        ventasCell.textContent = persona instanceof Empleado ? persona.ventas : "-";
-        row.appendChild(ventasCell);
+        const dniCell = document.createElement("td");
+        dniCell.textContent = persona instanceof Ciudadano ? persona.dni : "-";
+        row.appendChild(dniCell);
 
-        const sueldoCell = document.createElement("td");
-        sueldoCell.textContent = persona instanceof Empleado ? persona.sueldo : "-";
-        row.appendChild(sueldoCell);
 
-        const comprasCell = document.createElement("td");
-        comprasCell.textContent = persona instanceof Cliente ? persona.compras : "-";
-        row.appendChild(comprasCell);
-
-        const telefonoCell = document.createElement("td");
-        telefonoCell.textContent = persona instanceof Cliente ? persona.telefono : "-";
-        row.appendChild(telefonoCell);
+        const paisOrigenCell = document.createElement("td");
+        paisOrigenCell.textContent = persona instanceof Extranjero ? persona.paisOrigen : "-";
+        row.appendChild(paisOrigenCell);
 
         // Botón Modificar
         const modificarCell = document.createElement("td");
@@ -679,24 +603,22 @@ function OcultarColumna(indiceColumna) {
 
 function SetTipo(tipo)
 {
-    const input_ventas = document.getElementById("div-ventas");
-    const input_sueldo = document.getElementById("div-sueldo");
+    const input_dni = document.getElementById("div-dni");
+    const input_paisOrigen = document.getElementById("div-paisOrigen");
     const input_compras = document.getElementById("div-compras");
     const input_telefono = document.getElementById("div-telefono");
-    if (tipo == "empleado")
+    if (tipo == "ciudadano")
     {
         
-        input_ventas.hidden = false;
-        input_sueldo.hidden = false;
-        input_compras.hidden = true;
-        input_telefono.hidden = true;
+        input_dni.hidden = false;
+        input_paisOrigen.hidden = true;
+
     }
     else
     {
-        input_ventas.hidden = true;
-        input_sueldo.hidden = true;
-        input_compras.hidden = false;
-        input_telefono.hidden = false;
+        input_dni.hidden = true;
+        input_paisOrigen.hidden = false;
+
     }
 }
 
@@ -754,7 +676,10 @@ for (let i = 0; i < claves.length; i++)
         });
     }
 
-
+document.getElementById("btn-modificar").addEventListener("click", (event) => {
+    event.preventDefault();
+    Modificar();
+});
 
 const select_tipo = document.getElementById("select-tipo");
 select_tipo.addEventListener("change", (e)=>{SetTipo(select_tipo.value)});

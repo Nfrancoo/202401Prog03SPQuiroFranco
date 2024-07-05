@@ -20,7 +20,7 @@
         }
         .formularioABM {
             width: 300px;
-            height: 400px;
+            height: 350px;
             background-color: rgb(152, 236, 215);
             border: 2px solid black;
             position: absolute;
@@ -72,16 +72,6 @@
 
     <form id="form-datos" class="form-container">
         <h1>Form Datos</h1>
-        <p>Filtrar Por:
-            <select id="select-filtro">
-                <option value="todos">Todos</option>
-                <option value="empleado">Empleado</option>
-                <option value="cliente">Cliente</option>
-            </select>
-        </p>
-        <p>Calcular Edad Promedio:
-            <input id="txtPromedio" placeholder="Promedio" type="text" readonly><button button id="btn_calcular">Calcular</button>
-        </p>
         <p>Mostrar columnas: </p>
         <input type="checkbox" id="idCheck">
         <label>Id</label>
@@ -89,27 +79,21 @@
         <label>Nombre</label>
         <input type="checkbox" id="apellidoCheck">
         <label>Apellido</label>
-        <input type="checkbox" id="edadCheck">
-        <label>Edad</label>
-        <input type="checkbox" id="ventasCheck">
-        <label>Ventas</label>
-        <input type="checkbox" id="sueldoCheck">
-        <label>Sueldo</label>
-        <input type="checkbox" id="comprasCheck">
-        <label>Compras</label>
-        <input type="checkbox" id="telefonoCheck">
-        <label>Telefono</label>
+        <input type="checkbox" id="fechaNacimientoCheck">
+        <label>Fecha Nacimiento</label>
+        <input type="checkbox" id="dniCheck">
+        <label>Dni</label>
+        <input type="checkbox" id="paisOrigenCheck">
+        <label>Pais Origen</label>
         <table id="table-datos">
             <thead>
                 <tr>
                     <th id="t-head-id">Id</th>
                     <th id="t-head-nombre">Nombre</th>
                     <th id="t-head-apellido">Apellido</th>
-                    <th id="t-head-edad">Edad</th>
-                    <th id="t-head-ventas">Ventas</th>
-                    <th id="t-head-sueldo">Sueldo</th>
-                    <th id="t-head-compras">Compras</th>
-                    <th id="t-head-telefono">Telefono</th>
+                    <th id="t-head-fechaNacimiento">Fecha Nacimiento</th>
+                    <th id="t-head-dni">Dni</th>
+                    <th id="t-head-paisOrigen">Pais Origen</th>
                     <th id="t-head-modificar">Modificar</th>
                     <th id="t-head-eliminar">Eliminar</th>
                 </tr>
@@ -147,10 +131,10 @@
         </div>
         <div>
             <div>
-                <label>Edad</label>
+                <label>Fecha Nacimiento</label>
             </div>
             <div>
-                <input id="txt-edad" placeholder="edad" type="text">
+                <input id="txt-fechaNacimiento" placeholder="fechaNacimiento" type="text">
             </div>
         </div>
         <div>
@@ -159,41 +143,25 @@
             </div>
             <div>
                 <select id="select-tipo">
-                    <option value="empleado">Empleado</option>
-                    <option value="cliente">Cliente</option>
+                    <option value="ciudadano">Ciudadano</option>
+                    <option value="extranjero">Extranjero</option>
                 </select>
             </div>
         </div>
-        <div id="div-ventas">
+        <div id="div-dni">
             <div>
-                <label>Ventas</label>
+                <label>Dni</label>
             </div>
             <div>
-                <input id="txt-ventas" placeholder="ventas" type="text">
-            </div>
-        </div>
-        <div id="div-sueldo">
-            <div>
-                <label>Sueldo</label>
-            </div>
-            <div>
-                <input id="txt-sueldo" placeholder="sueldo" type="text">
+                <input id="txt-dni" placeholder="dni" type="text">
             </div>
         </div>
-        <div id="div-compras">
+        <div id="div-paisOrigen">
             <div>
-                <label>Compras</label>
+                <label>Pais Origen</label>
             </div>
             <div>
-                <input id="txt-compras" placeholder="compras" type="text">
-            </div>
-        </div>
-        <div id="div-telefono">
-            <div>
-                <label>Telefono</label>
-            </div>
-            <div>
-                <input id="txt-telefono" placeholder="Telefono" type="text">
+                <input id="txt-paisOrigen" placeholder="paisOrigen" type="text">
             </div>
         </div>
         <div>
