@@ -1,0 +1,210 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SP_Labo</title>
+
+    <link rel="stylesheet" href="diseño.css">
+    <style>
+        .form-container {
+            background-color: rgb(152, 236, 215);
+            border: 2px solid black;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+        }
+        .formularioABM {
+            width: 300px;
+            height: 400px;
+            background-color: rgb(152, 236, 215);
+            border: 2px solid black;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+        }
+        .form-container p {
+            margin-bottom: 10px;
+        }
+        .form-container input[type="checkbox"] {
+            margin-top: 5px;
+        }
+        .form-container .table-datos {
+            margin-top: -40px;
+        }
+        .form-container button {
+            display: inline-block;
+            margin-top: 30px;
+        }
+        .formularioABM h1 {
+            margin-top: -10px;
+            margin-bottom: 0px;
+        }
+        .formularioABM div {
+            margin-top: 5px;
+        }
+        .formularioABM button {
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 3px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        tr {
+            background-color: rgb(122, 252, 252);
+        }
+    </style>
+</head>
+<body>
+    <div id="spinner" class="loading" style="display:none;"></div>
+
+    <form id="form-datos" class="form-container">
+        <h1>Form Datos</h1>
+        <p>Filtrar Por:
+            <select id="select-filtro">
+                <option value="todos">Todos</option>
+                <option value="empleado">Empleado</option>
+                <option value="cliente">Cliente</option>
+            </select>
+        </p>
+        <p>Calcular Edad Promedio:
+            <input id="txtPromedio" placeholder="Promedio" type="text" readonly><button button id="btn_calcular">Calcular</button>
+        </p>
+        <p>Mostrar columnas: </p>
+        <input type="checkbox" id="idCheck">
+        <label>Id</label>
+        <input type="checkbox" id="nombreCheck">
+        <label>Nombre</label>
+        <input type="checkbox" id="apellidoCheck">
+        <label>Apellido</label>
+        <input type="checkbox" id="edadCheck">
+        <label>Edad</label>
+        <input type="checkbox" id="ventasCheck">
+        <label>Ventas</label>
+        <input type="checkbox" id="sueldoCheck">
+        <label>Sueldo</label>
+        <input type="checkbox" id="comprasCheck">
+        <label>Compras</label>
+        <input type="checkbox" id="telefonoCheck">
+        <label>Telefono</label>
+        <table id="table-datos">
+            <thead>
+                <tr>
+                    <th id="t-head-id">Id</th>
+                    <th id="t-head-nombre">Nombre</th>
+                    <th id="t-head-apellido">Apellido</th>
+                    <th id="t-head-edad">Edad</th>
+                    <th id="t-head-ventas">Ventas</th>
+                    <th id="t-head-sueldo">Sueldo</th>
+                    <th id="t-head-compras">Compras</th>
+                    <th id="t-head-telefono">Telefono</th>
+                    <th id="t-head-modificar">Modificar</th>
+                    <th id="t-head-eliminar">Eliminar</th>
+                </tr>
+            </thead>
+            <tbody id="t-user-body">
+            </tbody>
+        </table>
+        <button id="btn-mostrar-agregar" type="button">Agregar</button>
+    </form>
+    <form id="form-agregar" class="formularioABM" hidden>
+        <h1>Formulario ABM</h1>
+        <div id="div-id">
+            <div>
+                <label>Id</label>
+            </div>
+            <div>
+                <input class="form-control" id="txt-id" placeholder="id" type="text" readonly>
+            </div>
+        </div>
+        <div>
+            <div>
+                <label>Nombre</label>
+            </div>
+            <div>
+                <input id="txt-nombre" placeholder="nombre" type="text">
+            </div>
+        </div>
+        <div>
+            <div>
+                <label>Apellido</label>
+            </div>
+            <div>
+                <input id="txt-apellido" placeholder="apellido" type="text">
+            </div>
+        </div>
+        <div>
+            <div>
+                <label>Edad</label>
+            </div>
+            <div>
+                <input id="txt-edad" placeholder="edad" type="text">
+            </div>
+        </div>
+        <div>
+            <div>
+                <label>Tipo</label>
+            </div>
+            <div>
+                <select id="select-tipo">
+                    <option value="empleado">Empleado</option>
+                    <option value="cliente">Cliente</option>
+                </select>
+            </div>
+        </div>
+        <div id="div-ventas">
+            <div>
+                <label>Ventas</label>
+            </div>
+            <div>
+                <input id="txt-ventas" placeholder="ventas" type="text">
+            </div>
+        </div>
+        <div id="div-sueldo">
+            <div>
+                <label>Sueldo</label>
+            </div>
+            <div>
+                <input id="txt-sueldo" placeholder="sueldo" type="text">
+            </div>
+        </div>
+        <div id="div-compras">
+            <div>
+                <label>Compras</label>
+            </div>
+            <div>
+                <input id="txt-compras" placeholder="compras" type="text">
+            </div>
+        </div>
+        <div id="div-telefono">
+            <div>
+                <label>Telefono</label>
+            </div>
+            <div>
+                <input id="txt-telefono" placeholder="Telefono" type="text">
+            </div>
+        </div>
+        <div>
+            <div>
+                <button id="btn-agregar" type="button">Agregar</button>
+                <button id="btn-modificar" type="button">Modificar</button>
+                <button id="btn-eliminar" type="button">Eliminar</button>
+                <button id="btn-cancelar" type="button">Cancelar</button>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript" src="diagrama.js"></script>
+</body>
+</html>
